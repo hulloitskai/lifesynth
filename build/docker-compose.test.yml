@@ -1,0 +1,14 @@
+## This docker-compose config file is used to define test variations of the
+## images in this repository.
+
+version: "3.7"
+
+services:
+  api_test:
+    image: "stevenxie/api-tester:latest"
+    container_name: api_test
+    working_dir: /workspace
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace

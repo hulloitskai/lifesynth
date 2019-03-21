@@ -1,0 +1,42 @@
+language: bash
+
+os:
+  - linux
+services: docker
+
+env:
+  ## Required external variables:
+  ##   - DOCKER_USER, DOCKER_PASS
+  ##   - GH_TOKEN, GH_KUBECONFIG_PATH
+  global:
+    - DEPLOYMENTS="api api-varnish api-jobs api-jobs-ui"
+
+# Install external tools, fetch tags.
+before_install:
+  - export BINPATH=/opt/bin
+  - export PATH="${BINPATH}:${PATH}"
+  - ./scripts/tools.sh
+  - git fetch --tags
+
+## Install dependencies and build artifacts.
+install: export GO111MODULE=on && make ci-install
+
+## Run tests.
+script: make ci-test
+
+## Deploy to Docker Hub and Kubernetes.
+deploy:
+  provider: script
+  script: ./scripts/deploy.sh
+  skip-cleanup: true
+  on:
+    all_branches: true
+
+# ## Upload code coverage results.
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
+
+## Preserve external tools.
+cache:
+  directories:
+    - $BINPATH
