@@ -52,6 +52,6 @@ func main() {
 }
 
 func showHelp() {
-	fmt.Fprintf(os.Stderr, "Usage: %s <Markdown file>\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "Usage: %s <markdown file>\n", os.Args[0])
 	os.Exit(1)
 }
